@@ -29,14 +29,17 @@ public class PlayerController : MonoBehaviour
     public InputAction Leftstick;
     public InputAction buttonA;
     public InputAction buttonLT;
+    public InputAction buttonRT;
     public InputAction Rightstick;
 
     [Header("gameobjects")]
     // get access to playeraimin
     public GameObject ShootConeObject;
     PlayerCone scriptPlayerAiming;
+    // playershoot access
+    public GameObject PlayerGunObject;
+    PlayerShoot scriptPlayerShoot;
 
-    
 
     //controller enabling and disabling
 
@@ -46,6 +49,7 @@ public class PlayerController : MonoBehaviour
         Leftstick.Enable();
         buttonA.Enable();
         buttonLT.Enable();
+        buttonRT.Enable();
         Rightstick.Enable();
 
     }
@@ -55,6 +59,7 @@ public class PlayerController : MonoBehaviour
         Leftstick.Disable();
         buttonA.Disable();
         buttonLT.Disable();
+        buttonRT.Disable();
         Rightstick.Disable();
 
     }
@@ -64,11 +69,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        //get player aiming
+        //get player aiming and shooting
         scriptPlayerAiming = ShootConeObject.GetComponent<PlayerCone>();
-
-      
-
+        scriptPlayerShoot = PlayerGunObject.GetComponent<PlayerShoot>();
     }
 
 
@@ -78,7 +81,7 @@ public class PlayerController : MonoBehaviour
         Vector2 inputVectorMove = Leftstick.ReadValue<Vector2>();
        
         Vector2 inputVectorView = Rightstick.ReadValue<Vector2>();
-        Debug.Log(inputVectorView + "view");
+        //Debug.Log(inputVectorView + "view");
         if (!isDashing && !isDashFalloff)
         {
             PlayerMovements();
@@ -87,7 +90,7 @@ public class PlayerController : MonoBehaviour
         else if (isDashing)
         {
             controller.Move(inputVectorMove * Time.deltaTime * dashSpeed);
-            Debug.Log(dashvalue);
+           // Debug.Log(dashvalue);
         }
       
 
@@ -109,7 +112,15 @@ public class PlayerController : MonoBehaviour
         //activate aim
         playerAimingJoystick();
 
+        // shooting
+        float rtPress = buttonRT.ReadValue<float>();
+        if (rtPress == 1)
+        {
+            scriptPlayerShoot.Fire();
 
+
+
+        }
     }
 
     //dash co-routine to give variable
