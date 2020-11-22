@@ -27,8 +27,8 @@ public class PlayerCone : MonoBehaviour
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         rmScript = RM.GetComponent<ResourceManager>();
-        
 
+        aimAngleFloat = 0;
         
 
     }
@@ -99,11 +99,14 @@ public class PlayerCone : MonoBehaviour
         return n;
     }
 
+   
+ 
+    /**
     // Parts that will be passed around in other scripts
     public void SetAimDirection(Vector2 aimAngleVector)
     {
         aimAngleFloat = GetAngleFromVectorFloat(aimAngleVector) + cowardiceAngle/2;
        // Debug.Log(aimAngleFloat + "aim angle");
     }
-   
+   **/
 }

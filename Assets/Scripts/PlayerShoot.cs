@@ -24,7 +24,7 @@ public class PlayerShoot : MonoBehaviour
 
     // bullet properties
     public float bulletSpeed = 30;
-    public float bulletLife = 3;
+    public float bulletLife = 1;
 
 
 
@@ -38,29 +38,41 @@ public class PlayerShoot : MonoBehaviour
     //lateupdate cause it's after the player update
     void LateUpdate()
     {
-        // get shoot angle
+
+        // randomness
         cowardiceAngle = rmScript.cowardiceAngle;
         aimAngleFloat = pcScript.aimAngleFloat;
         shootAngleFloat = aimAngleFloat;
         shootAngleFloat += Random.Range(-cowardiceAngle, 0);
+        
     }
 
     //this gets called by player controller update
     public void Fire()
     {
-      
-
+        // prepping bullet
         GameObject bullet = Instantiate(bulletPrefab);
         Physics.IgnoreCollision(bullet.GetComponent<Collider>(),
             shootstart.parent.GetComponent<Collider>());
-
+        
         bullet.transform.position = shootstart.position;
-        //rotated correctly
+
+        //get rotations
         Vector3 rotation = bullet.transform.rotation.eulerAngles;
-        bullet.transform.rotation = Quaternion.Euler(transform.eulerAngles.x,rotation.x,rotation.z);
+        rotation.x = 0f;
+        rotation.y = 0f;
+        //more randomness
+        Quaternion randobullet = Random.rotation;
+        randobullet.x = 0f;
+        randobullet.y = 0f;
+        bullet.transform.rotation = Quaternion.RotateTowards(bullet.transform.rotation,randobullet,shootAngleFloat);
+        
+        //actually shooting
+        bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.up*bulletSpeed, ForceMode.Impulse);
+        Debug.Log(bullet.transform.up);
 
-        bullet.GetComponent<Rigidbody>().AddForce(shootstart.forward * bulletSpeed, ForceMode.Impulse);
 
+        //bullet die
         StartCoroutine(DestroyBulletAfterTime(bullet, bulletLife));
       
 

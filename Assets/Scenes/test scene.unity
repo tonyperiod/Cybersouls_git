@@ -412,6 +412,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6564545953014488419, guid: b3ba7650c30a45a4bb2b355b90b5a29e, type: 3}
+      propertyPath: cowardiceAngle
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 8202215950676361092, guid: b3ba7650c30a45a4bb2b355b90b5a29e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.4187145
@@ -1390,7 +1394,7 @@ GameObject:
   - component: {fileID: 2077845627}
   - component: {fileID: 2077845628}
   - component: {fileID: 2077845626}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ShootCone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1406,7 +1410,7 @@ Transform:
   m_GameObject: {fileID: 2077845624}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.506, y: 0.04, z: 0.01}
-  m_LocalScale: {x: 1, y: 10.241586, z: 9.847966}
+  m_LocalScale: {x: 1, y: 10.241586, z: 1}
   m_Children: []
   m_Father: {fileID: 519675413}
   m_RootOrder: 0

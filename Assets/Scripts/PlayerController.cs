@@ -78,8 +78,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // controller
-        Vector2 inputVectorMove = Leftstick.ReadValue<Vector2>();
-       
+        Vector2 inputVectorMove = Leftstick.ReadValue<Vector2>();       
         Vector2 inputVectorView = Rightstick.ReadValue<Vector2>();
         //Debug.Log(inputVectorView + "view");
         if (!isDashing && !isDashFalloff)
@@ -197,7 +196,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 inputVector = Rightstick.ReadValue<Vector2>();
        // Debug.Log(inputVector + "view");
-
+       /*
         scriptPlayerAiming.SetAimDirection(inputVector);
         /*scriptPlayerAiming.SetOrigin(transform.position);*/
 
