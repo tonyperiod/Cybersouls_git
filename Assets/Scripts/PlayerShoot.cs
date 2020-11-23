@@ -46,7 +46,7 @@ public class PlayerShoot : MonoBehaviour
         aimAngleFloat = pctScript.aimAngleFloat;
         shootAngleFloat = aimAngleFloat;
         //shootAngleFloat += Random.Range(-cowardiceAngle, +cowardiceAngle);
-        shootAngleFloat += cowardiceAngle;
+        shootAngleFloat -= cowardiceAngle/2;
     }
 
     //this gets called by player controller update
@@ -63,15 +63,22 @@ public class PlayerShoot : MonoBehaviour
         Vector3 rotation = bullet.transform.rotation.eulerAngles;
         rotation.x = 0f;
         rotation.y = 0f;
+        rotation.z = 0f;
         //more randomness
-        Quaternion randobullet = Random.rotation;
-        randobullet.x = 0f;
-        randobullet.y = 0f;
-        bullet.transform.rotation = Quaternion.RotateTowards(bullet.transform.rotation,randobullet,shootAngleFloat);
+        float randomShootAngle = shootAngleFloat + Random.Range(-cowardiceAngle/2, +cowardiceAngle/2);
+
+        Quaternion randobullet = Quaternion.Euler(0f, 0f, randomShootAngle);
+     
+
+       bullet.transform.rotation = Quaternion.RotateTowards(bullet.transform.rotation,randobullet,shootAngleFloat);
+
         
+
+
         //actually shooting
-        bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.up*bulletSpeed, ForceMode.Impulse);
-        Debug.Log(bullet.transform.up);
+       bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.right*bulletSpeed, ForceMode.Impulse);
+
+        Debug.Log(bullet.transform.right);
 
 
         //bullet die
