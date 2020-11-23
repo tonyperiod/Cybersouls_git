@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class GunRotation : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void SetAimDirection(Vector2 aimAngleVector)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        aimAngleFloat = GetAngleFromVectorFloat(aimAngleVector) + cowardiceAngle;
+        // Debug.Log(aimAngleFloat + "aim angle");
     }
 }

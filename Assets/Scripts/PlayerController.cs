@@ -195,12 +195,12 @@ public class PlayerController : MonoBehaviour
     void playerAimingJoystick ()
     {
         Vector2 inputVector = Rightstick.ReadValue<Vector2>();
-       // Debug.Log(inputVector + "view");
-       /*
-        scriptPlayerAiming.SetAimDirection(inputVector);
-        /*scriptPlayerAiming.SetOrigin(transform.position);*/
+        // Debug.Log(inputVector + "view");
+        /*
+         scriptPlayerAiming.SetAimDirection(inputVector);
+         /*scriptPlayerAiming.SetOrigin(transform.position);*/
 
-
+        aimAngleFloat = GetAngleFromVectorFloat(aimAngleVector) + cowardiceAngle;
     }
 
 
