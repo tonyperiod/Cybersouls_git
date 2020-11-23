@@ -5,15 +5,15 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header ("movement")]
-  
+    [Header("movement")]
+
     public float moveSpeed;
     public float jumpForce;
     public float gravityForce;
     public float wallForce;
 
     [Header("dash")]
- 
+
     public float dashSpeed;
     public float dashDur;
     public float dashFalloff;
@@ -32,6 +32,9 @@ public class PlayerController : MonoBehaviour
     public InputAction buttonRT;
     public InputAction Rightstick;
 
+    [Header("gun stuff")]
+    public float aimAngleFloat;
+
     [Header("gameobjects")]
     // get access to playeraimin
     public GameObject ShootConeObject;
@@ -39,8 +42,10 @@ public class PlayerController : MonoBehaviour
     // playershoot access
     public GameObject PlayerGunObject;
     PlayerShoot scriptPlayerShoot;
-
-
+    //resource manager
+    public GameObject resourceManagerObject;
+    ResourceManager rmscript;
+    private float cowardiceAngle;
     //controller enabling and disabling
 
 
@@ -64,21 +69,25 @@ public class PlayerController : MonoBehaviour
 
     }
 
- //character controller
+    //character controller
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        //get player aiming and shooting
+        //getting component
         scriptPlayerAiming = ShootConeObject.GetComponent<PlayerCone>();
         scriptPlayerShoot = PlayerGunObject.GetComponent<PlayerShoot>();
+        rmscript = resourceManagerObject.GetComponent<ResourceManager>();
+
     }
 
 
     void Update()
     {
+        //getting parameters from other scripts
+        cowardiceAngle = rmscript.cowardiceAngle;
         // controller
-        Vector2 inputVectorMove = Leftstick.ReadValue<Vector2>();       
+        Vector2 inputVectorMove = Leftstick.ReadValue<Vector2>();
         Vector2 inputVectorView = Rightstick.ReadValue<Vector2>();
         //Debug.Log(inputVectorView + "view");
         if (!isDashing && !isDashFalloff)
@@ -89,19 +98,19 @@ public class PlayerController : MonoBehaviour
         else if (isDashing)
         {
             controller.Move(inputVectorMove * Time.deltaTime * dashSpeed);
-           // Debug.Log(dashvalue);
+            // Debug.Log(dashvalue);
         }
-      
+
 
         if (controller.isGrounded)
             dashvalue = 0;
-           
+
         if (dashvalue < 3 && !controller.isGrounded && buttonLT.triggered)
         {
             StartCoroutine(Dash());
             StartCoroutine(DashFalloff());
 
-            
+
         }
         else if (dashvalue >= 3)
         {
@@ -115,9 +124,7 @@ public class PlayerController : MonoBehaviour
         float rtPress = buttonRT.ReadValue<float>();
         if (rtPress == 1)
         {
-            scriptPlayerShoot.Fire();
-
-
+            scriptPlayerShoot.Fire();            
 
         }
     }
@@ -128,7 +135,7 @@ public class PlayerController : MonoBehaviour
 
         float startTime = Time.time;
 
-       
+
         while (Time.time < startTime + dashDur)
         {
             isDashing = true;
@@ -137,10 +144,10 @@ public class PlayerController : MonoBehaviour
         dashvalue = dashvalue + 1f;
         isDashing = false;
 
-        
-        
+
+
     }
-    IEnumerator DashFalloff ()
+    IEnumerator DashFalloff()
     {
         float startTime = Time.time;
         while (Time.time < startTime + dashFalloff)
@@ -164,7 +171,7 @@ public class PlayerController : MonoBehaviour
         moveDirection.x = inputVector.x * moveSpeed;
 
         //jump
-        if (controller.isGrounded && aPress==1)
+        if (controller.isGrounded && aPress == 1)
         {
             moveDirection.y = jumpForce;
         }
@@ -172,19 +179,19 @@ public class PlayerController : MonoBehaviour
         //gravity
         if (isDashing == false)
         {
-        moveDirection.y = moveDirection.y + (Physics.gravity.y * Time.deltaTime * gravityForce);
+            moveDirection.y = moveDirection.y + (Physics.gravity.y * Time.deltaTime * gravityForce);
         }
 
         //final movement
-        controller.Move(moveDirection * Time.deltaTime);       
+        controller.Move(moveDirection * Time.deltaTime);
     }
 
     //wall scramble -> you have to spam jump to get up wall
     private void OnControllerColliderHit(ControllerColliderHit hit)
 
     {
-        
-       
+
+
         if (!controller.isGrounded && hit.normal.y < 0.1f && buttonA.triggered)
         {
             Debug.DrawRay(hit.point, hit.normal, Color.red, 1.25f);
@@ -192,17 +199,21 @@ public class PlayerController : MonoBehaviour
         }
     }
     //aim update code
-    void playerAimingJoystick ()
-    {
-        Vector2 inputVector = Rightstick.ReadValue<Vector2>();
-        // Debug.Log(inputVector + "view");
-        /*
-         scriptPlayerAiming.SetAimDirection(inputVector);
-         /*scriptPlayerAiming.SetOrigin(transform.position);*/
 
-        aimAngleFloat = GetAngleFromVectorFloat(aimAngleVector) + cowardiceAngle;
+    public static float GetAngleFromVectorFloat(Vector3 dir)
+    {
+        dir = dir.normalized;
+        float n = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        if (n < 0) n += 360;
+
+        return n;
     }
 
-
-
+    public void playerAimingJoystick()
+    {
+        Vector2 inputVector = Rightstick.ReadValue<Vector2>();                  
+      
+        aimAngleFloat = GetAngleFromVectorFloat(inputVector) + cowardiceAngle / 2;
+               
+    }
 }

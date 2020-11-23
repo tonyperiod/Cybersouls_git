@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
-    // resource manager get
+  //get components from other scripts
     public GameObject RM;
     ResourceManager rmScript;
     private float cowardiceAngle;
-
-    // playercone get
+       
     public GameObject PC;
     PlayerCone pcScript;
 
+    public GameObject PCT;
+    PlayerController pctScript;       
     private float aimAngleFloat;
 
     //shooty stuff
@@ -33,6 +34,7 @@ public class PlayerShoot : MonoBehaviour
         //get scripts
         rmScript = RM.GetComponent<ResourceManager>();
         pcScript = PC.GetComponent<PlayerCone>();
+        pctScript = PCT.GetComponent<PlayerController>();
     }
 
     //lateupdate cause it's after the player update
@@ -41,10 +43,10 @@ public class PlayerShoot : MonoBehaviour
 
         // randomness
         cowardiceAngle = rmScript.cowardiceAngle;
-        aimAngleFloat = pcScript.aimAngleFloat;
+        aimAngleFloat = pctScript.aimAngleFloat;
         shootAngleFloat = aimAngleFloat;
-        shootAngleFloat += Random.Range(-cowardiceAngle, 0);
-        
+        //shootAngleFloat += Random.Range(-cowardiceAngle, +cowardiceAngle);
+        shootAngleFloat += cowardiceAngle;
     }
 
     //this gets called by player controller update

@@ -12,14 +12,18 @@ public class PlayerCone : MonoBehaviour
    
     public int rayCount = 30;    
     public float shotDistance = 5;
-    private Vector3 origin = Vector3.zero;
-    public float aimAngleFloat;
+    private Vector3 origin = Vector3.zero;   
     private Mesh mesh;
 
     //connect to resource manager
     public GameObject RM;
     ResourceManager rmScript;
     private float cowardiceAngle;
+
+    //connect to shoulder
+    public GameObject playerControllerObject;
+    PlayerController pcscript;
+    private float aimAngleFloat;
   
     public void Start()
     {
@@ -27,8 +31,10 @@ public class PlayerCone : MonoBehaviour
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         rmScript = RM.GetComponent<ResourceManager>();
+        pcscript= playerControllerObject.GetComponent<PlayerController>();
 
-        aimAngleFloat = 0;
+        
+        
         
 
     }
@@ -37,6 +43,9 @@ public class PlayerCone : MonoBehaviour
     {
         //get cowardice angle 
         cowardiceAngle = rmScript.cowardiceAngle;
+
+        //get aimAngleFloat
+        aimAngleFloat = pcscript.aimAngleFloat;              
 
         // define the angle
         float angleIncrease = cowardiceAngle / rayCount;
@@ -90,14 +99,7 @@ public class PlayerCone : MonoBehaviour
         return new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
         
     }
-    public static float GetAngleFromVectorFloat(Vector3 dir)
-    {
-        dir = dir.normalized;
-        float n = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        if (n < 0) n += 360;
 
-        return n;
-    }
 
    
  

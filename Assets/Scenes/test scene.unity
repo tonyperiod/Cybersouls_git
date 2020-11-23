@@ -401,6 +401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RM: {fileID: 23854387}
   PC: {fileID: 2077845624}
+  PCT: {fileID: 793075701}
   bulletPrefab: {fileID: 85365886}
   shootstart: {fileID: 777294125}
   bulletSpeed: 30
@@ -806,8 +807,10 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Rightstick
       m_Flags: 0
+  aimAngleFloat: 0
   ShootConeObject: {fileID: 2077845624}
   PlayerGunObject: {fileID: 519675412}
+  resourceManagerObject: {fileID: 23854387}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1201,6 +1204,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1774298797}
+  - component: {fileID: 1774298798}
   m_Layer: 2
   m_Name: Shoulder
   m_TagString: Untagged
@@ -1223,6 +1227,18 @@ Transform:
   m_Father: {fileID: 793075706}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1774298798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774298796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 491f08181e5b12346a13db8dd07b0311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1962123611
 GameObject:
   m_ObjectHideFlags: 0
@@ -1460,8 +1476,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rayCount: 30
   shotDistance: 5
-  aimAngleFloat: 0
   RM: {fileID: 23854387}
+  playerControllerObject: {fileID: 793075701}
 --- !u!33 &2077845627
 MeshFilter:
   m_ObjectHideFlags: 0
