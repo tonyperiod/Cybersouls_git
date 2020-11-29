@@ -19,12 +19,7 @@ public class PlayerCone : MonoBehaviour
     public GameObject RM;
     ResourceManager rmScript;
     private float cowardiceAngle;
-
-    //connect to shoulder
-    public GameObject playerControllerObject;
-    PlayerController pcscript;
-    private float aimAngleFloat;
-  
+    
     public void Start()
     {
         // creation of range mesh
