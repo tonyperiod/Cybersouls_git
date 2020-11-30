@@ -30,7 +30,6 @@ public class GunRotation : MonoBehaviour
         //rotate the shoulder
       aimAngleFloat = pctScript.aimAngleFloat;
         Vector3 vecrotation = new Vector3(0f, 0f, aimAngleFloat);
-        print(vecrotation);
         Quaternion rotation = Quaternion.Euler(vecrotation);
        shoulder.transform.rotation = Quaternion.RotateTowards(shoulder.transform.rotation, rotation, 360f);
 

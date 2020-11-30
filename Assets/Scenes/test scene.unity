@@ -401,6 +401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RM: {fileID: 23854387}
   PC: {fileID: 2077845624}
+  PCT: {fileID: 793075701}
   bulletPrefab: {fileID: 85365886}
   shootstart: {fileID: 777294125}
   bulletSpeed: 30
@@ -1277,6 +1278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PCT: {fileID: 793075701}
+  shoulder: {fileID: 1774298796}
 --- !u!1 &1962123611
 GameObject:
   m_ObjectHideFlags: 0

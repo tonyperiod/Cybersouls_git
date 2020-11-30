@@ -12,12 +12,12 @@ public class PlayerShoot : MonoBehaviour
     public GameObject PC;
     PlayerCone pcScript;
 
-    //public GameObject PCT;
-    //PlayerController pctScript;       
-    //private float aimAngleFloat;
+    public GameObject PCT;
+    PlayerController pctScript;
+    private float aimAngleFloat;
 
     //shooty stuff
-   // private float shootAngleFloat;
+    // private float shootAngleFloat;
 
     //bullet get
     public GameObject bulletPrefab;
@@ -34,7 +34,7 @@ public class PlayerShoot : MonoBehaviour
         //get scripts
         rmScript = RM.GetComponent<ResourceManager>();
         pcScript = PC.GetComponent<PlayerCone>();
-        //pctScript = PCT.GetComponent<PlayerController>();
+        pctScript = PCT.GetComponent<PlayerController>();
     }
 
     //lateupdate cause it's after the player update
@@ -43,10 +43,9 @@ public class PlayerShoot : MonoBehaviour
 
         // randomness
         cowardiceAngle = rmScript.cowardiceAngle;
-        //aimAngleFloat = pctScript.aimAngleFloat;
+        aimAngleFloat = pctScript.aimAngleFloat;
         //shootAngleFloat = aimAngleFloat;
-        ////shootAngleFloat += Random.Range(-cowardiceAngle, +cowardiceAngle);
-        //shootAngleFloat -= cowardiceAngle/2;a
+
     }
 
     //this gets called by player controller update
@@ -58,6 +57,7 @@ public class PlayerShoot : MonoBehaviour
             shootstart.parent.GetComponent<Collider>());
         
         bullet.transform.position = shootstart.position;
+       
 
         //get rotations
         Vector3 rotation = bullet.transform.rotation.eulerAngles;
@@ -68,7 +68,9 @@ public class PlayerShoot : MonoBehaviour
      
         //randomness
         float randomShootAngle = Random.Range(-cowardiceAngle/2, +cowardiceAngle/2);        
-        Vector3 randovec = new Vector3(0f, 0f, randomShootAngle);                       
+        Vector3 randovec = new Vector3(0f, 0f, randomShootAngle+aimAngleFloat);
+        print(randovec);
+        print(aimAngleFloat + "aimangle");
         Quaternion randobullet = Quaternion.Euler(randovec);
           
        bullet.transform.rotation = Quaternion.RotateTowards(bullet.transform.rotation,randobullet, 360f);
@@ -78,8 +80,7 @@ public class PlayerShoot : MonoBehaviour
 
        bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.right*bulletSpeed, ForceMode.Impulse);
             
-        //nograv
-
+    
 
         //bullet die
         StartCoroutine(DestroyBulletAfterTime(bullet, bulletLife));
