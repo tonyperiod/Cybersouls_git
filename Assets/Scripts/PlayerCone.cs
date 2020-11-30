@@ -12,15 +12,14 @@ public class PlayerCone : MonoBehaviour
    
     public int rayCount = 30;    
     public float shotDistance = 5;
-    private Vector3 origin = Vector3.zero;
-    public float aimAngleFloat;
+    private Vector3 origin = Vector3.zero;   
     private Mesh mesh;
 
     //connect to resource manager
     public GameObject RM;
     ResourceManager rmScript;
     private float cowardiceAngle;
-  
+    
     public void Start()
     {
         // creation of range mesh
@@ -30,6 +29,8 @@ public class PlayerCone : MonoBehaviour
         
 
         
+        
+        
 
     }
 
@@ -37,10 +38,12 @@ public class PlayerCone : MonoBehaviour
     {
         //get cowardice angle 
         cowardiceAngle = rmScript.cowardiceAngle;
+        
 
         // define the angle
         float angleIncrease = cowardiceAngle / rayCount;
-        float angle = aimAngleFloat;
+        //start angle
+        float angle = cowardiceAngle/2;
 
         //nono touch, this is to make the field of view with modifiable angle
         Vector3[] vertices = new Vector3[rayCount +1 +1];
@@ -90,20 +93,16 @@ public class PlayerCone : MonoBehaviour
         return new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
         
     }
-    public static float GetAngleFromVectorFloat(Vector3 dir)
-    {
-        dir = dir.normalized;
-        float n = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        if (n < 0) n += 360;
 
-        return n;
-    }
 
+   
+ 
+    /**
     // Parts that will be passed around in other scripts
     public void SetAimDirection(Vector2 aimAngleVector)
     {
         aimAngleFloat = GetAngleFromVectorFloat(aimAngleVector) + cowardiceAngle/2;
        // Debug.Log(aimAngleFloat + "aim angle");
     }
-   
+   **/
 }

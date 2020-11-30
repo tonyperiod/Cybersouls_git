@@ -4,15 +4,43 @@ using UnityEngine;
 
 public class GunRotation : MonoBehaviour
 {
-    // Start is called before the first frame update
+    
+
+    //get stuff from player controller
+    public GameObject PCT;
+    PlayerController pctScript;
+    private float aimAngleFloat;
+
+    //will this fix
+    public GameObject shoulder;
+
+
     void Start()
     {
+        //get scripts
+        pctScript = PCT.GetComponent<PlayerController>();
+        aimAngleFloat = pctScript.aimAngleFloat;
+
         
     }
 
-    // Update is called once per frame
-    void Update()
+    //lateupdate cause it's after the player update
+    void LateUpdate()
     {
-        
+        //rotate the shoulder
+      aimAngleFloat = pctScript.aimAngleFloat;
+        Vector3 vecrotation = new Vector3(0f, 0f, aimAngleFloat);
+        Quaternion rotation = Quaternion.Euler(vecrotation);
+       shoulder.transform.rotation = Quaternion.RotateTowards(shoulder.transform.rotation, rotation, 360f);
+
+
+
+
+
     }
+    
+
+
+
+
 }

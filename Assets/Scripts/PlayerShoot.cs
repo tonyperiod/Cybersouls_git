@@ -4,19 +4,20 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
-    // resource manager get
+  //get components from other scripts
     public GameObject RM;
     ResourceManager rmScript;
     private float cowardiceAngle;
-
-    // playercone get
+       
     public GameObject PC;
     PlayerCone pcScript;
 
+    public GameObject PCT;
+    PlayerController pctScript;
     private float aimAngleFloat;
 
     //shooty stuff
-    private float shootAngleFloat;
+    // private float shootAngleFloat;
 
     //bullet get
     public GameObject bulletPrefab;
@@ -24,43 +25,64 @@ public class PlayerShoot : MonoBehaviour
 
     // bullet properties
     public float bulletSpeed = 30;
-    public float bulletLife = 3;
+    public float bulletLife = 1;
 
-
+    public float shootstepspeed = 1;
 
     void Start()
     {
         //get scripts
         rmScript = RM.GetComponent<ResourceManager>();
         pcScript = PC.GetComponent<PlayerCone>();
+        pctScript = PCT.GetComponent<PlayerController>();
     }
 
     //lateupdate cause it's after the player update
     void LateUpdate()
     {
-        // get shoot angle
+
+        // randomness
         cowardiceAngle = rmScript.cowardiceAngle;
-        aimAngleFloat = pcScript.aimAngleFloat;
-        shootAngleFloat = aimAngleFloat;
-        shootAngleFloat += Random.Range(-cowardiceAngle, 0);
+        aimAngleFloat = pctScript.aimAngleFloat;
+        //shootAngleFloat = aimAngleFloat;
+
     }
 
     //this gets called by player controller update
     public void Fire()
     {
-      
-
+        // prepping bullet
         GameObject bullet = Instantiate(bulletPrefab);
         Physics.IgnoreCollision(bullet.GetComponent<Collider>(),
             shootstart.parent.GetComponent<Collider>());
-
+        
         bullet.transform.position = shootstart.position;
-        //rotated correctly
+       
+
+        //get rotations
         Vector3 rotation = bullet.transform.rotation.eulerAngles;
-        bullet.transform.rotation = Quaternion.Euler(transform.eulerAngles.x,rotation.x,rotation.z);
+        rotation.x = 0f;
+        rotation.y = 0f;
+        rotation.z = 0f;
+                       
+     
+        //randomness
+        float randomShootAngle = Random.Range(-cowardiceAngle/2, +cowardiceAngle/2);        
+        Vector3 randovec = new Vector3(0f, 0f, randomShootAngle+aimAngleFloat);
+        print(randovec);
+        print(aimAngleFloat + "aimangle");
+        Quaternion randobullet = Quaternion.Euler(randovec);
+          
+       bullet.transform.rotation = Quaternion.RotateTowards(bullet.transform.rotation,randobullet, 360f);
+                
+        //actually shooting, have to base on aim direction
+        
 
-        bullet.GetComponent<Rigidbody>().AddForce(shootstart.forward * bulletSpeed, ForceMode.Impulse);
+       bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.right*bulletSpeed, ForceMode.Impulse);
+            
+    
 
+        //bullet die
         StartCoroutine(DestroyBulletAfterTime(bullet, bulletLife));
       
 

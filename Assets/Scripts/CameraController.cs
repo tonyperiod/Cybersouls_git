@@ -25,21 +25,8 @@ public class CameraController : MonoBehaviour
         
         cameraPosition = target.position - offset;
 
-       transform.position = Vector3.Lerp(transform.position, cameraPosition, smoothness* Time.fixedDeltaTime);
+       transform.position = Vector3.Slerp(transform.position, cameraPosition, smoothness* Time.fixedDeltaTime);
         
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }
