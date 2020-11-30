@@ -11,23 +11,35 @@ public class GunRotation : MonoBehaviour
     PlayerController pctScript;
     private float aimAngleFloat;
 
+    //will this fix
+    public GameObject shoulder;
+
 
     void Start()
     {
         //get scripts
         pctScript = PCT.GetComponent<PlayerController>();
         aimAngleFloat = pctScript.aimAngleFloat;
+
+        
     }
 
     //lateupdate cause it's after the player update
     void LateUpdate()
     {
-
+        //rotate the shoulder
       aimAngleFloat = pctScript.aimAngleFloat;
-               
+        Vector3 vecrotation = new Vector3(0f, 0f, aimAngleFloat);
+        print(vecrotation);
+        Quaternion rotation = Quaternion.Euler(vecrotation);
+       shoulder.transform.rotation = Quaternion.RotateTowards(shoulder.transform.rotation, rotation, 360f);
+
+
+
+
+
     }
-
-
+    
 
 
 

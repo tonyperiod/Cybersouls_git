@@ -73,10 +73,12 @@ public class PlayerShoot : MonoBehaviour
           
        bullet.transform.rotation = Quaternion.RotateTowards(bullet.transform.rotation,randobullet, 360f);
                 
-        //actually shooting
+        //actually shooting, have to base on aim direction
+        
+
        bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.right*bulletSpeed, ForceMode.Impulse);
             
-        
+        //nograv
 
 
         //bullet die

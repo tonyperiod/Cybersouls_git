@@ -213,7 +213,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 inputVector = Rightstick.ReadValue<Vector2>();                  
       
-        aimAngleFloat = GetAngleFromVectorFloat(inputVector) + cowardiceAngle / 2;
+        aimAngleFloat = GetAngleFromVectorFloat(inputVector) /*+ cowardiceAngle / 2*/;
                
     }
 }
