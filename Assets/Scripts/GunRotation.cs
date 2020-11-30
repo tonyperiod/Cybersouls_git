@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GunRotation : MonoBehaviour
 {
-    private float shootAngleFloat;
+    
 
     //get stuff from player controller
     public GameObject PCT;
@@ -24,6 +24,12 @@ public class GunRotation : MonoBehaviour
     {
 
       aimAngleFloat = pctScript.aimAngleFloat;
-      shootAngleFloat = aimAngleFloat;          
+               
     }
+
+
+
+
+
+
 }

@@ -27,7 +27,7 @@ public class PlayerShoot : MonoBehaviour
     public float bulletSpeed = 30;
     public float bulletLife = 1;
 
-
+    public float shootstepspeed = 1;
 
     void Start()
     {
@@ -64,21 +64,19 @@ public class PlayerShoot : MonoBehaviour
         rotation.x = 0f;
         rotation.y = 0f;
         rotation.z = 0f;
-        //more randomness
-        float randomShootAngle = /*shootAngleFloat +*/ Random.Range(-cowardiceAngle/2, +cowardiceAngle/2);
-
-        Quaternion randobullet = Quaternion.Euler(0f, 0f, randomShootAngle);
+                       
      
-
-       bullet.transform.rotation = Quaternion.RotateTowards(bullet.transform.rotation,randobullet,1f);
-
-        
-
-
+        //randomness
+        float randomShootAngle = Random.Range(-cowardiceAngle/2, +cowardiceAngle/2);        
+        Vector3 randovec = new Vector3(0f, 0f, randomShootAngle);                       
+        Quaternion randobullet = Quaternion.Euler(randovec);
+          
+       bullet.transform.rotation = Quaternion.RotateTowards(bullet.transform.rotation,randobullet, 360f);
+                
         //actually shooting
        bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.right*bulletSpeed, ForceMode.Impulse);
-
-        Debug.Log(bullet.transform.right);
+            
+        
 
 
         //bullet die

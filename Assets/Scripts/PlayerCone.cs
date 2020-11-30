@@ -26,7 +26,7 @@ public class PlayerCone : MonoBehaviour
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         rmScript = RM.GetComponent<ResourceManager>();
-        pcscript= playerControllerObject.GetComponent<PlayerController>();
+        
 
         
         
@@ -38,13 +38,12 @@ public class PlayerCone : MonoBehaviour
     {
         //get cowardice angle 
         cowardiceAngle = rmScript.cowardiceAngle;
-
-        //get aimAngleFloat
-        aimAngleFloat = pcscript.aimAngleFloat;              
+        
 
         // define the angle
         float angleIncrease = cowardiceAngle / rayCount;
-        float angle = aimAngleFloat;
+        //start angle
+        float angle = cowardiceAngle/2;
 
         //nono touch, this is to make the field of view with modifiable angle
         Vector3[] vertices = new Vector3[rayCount +1 +1];
