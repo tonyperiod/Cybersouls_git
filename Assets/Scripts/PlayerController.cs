@@ -216,4 +216,32 @@ public class PlayerController : MonoBehaviour
         aimAngleFloat = GetAngleFromVectorFloat(inputVector) /*+ cowardiceAngle / 2*/;
                
     }
+
+    //interactions with enemies
+
+
+
+    // this comment will then get used by projectiles and attacks
+    //private void OnTriggerEnter(Collider other)
+    //{
+
+
+
+    //    if (other.gameObject.tag == "Enemy")
+
+    //    {
+    //        Debug.Log(" hit enemy");
+
+    //    }
+
+
+    //}
+
+
 }
+
+
+
+
+
+
