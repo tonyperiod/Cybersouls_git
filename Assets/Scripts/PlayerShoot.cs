@@ -69,8 +69,8 @@ public class PlayerShoot : MonoBehaviour
         //randomness
         float randomShootAngle = Random.Range(-cowardiceAngle/2, +cowardiceAngle/2);        
         Vector3 randovec = new Vector3(0f, 0f, randomShootAngle+aimAngleFloat);
-        print(randovec);
-        print(aimAngleFloat + "aimangle");
+
+
         Quaternion randobullet = Quaternion.Euler(randovec);
           
        bullet.transform.rotation = Quaternion.RotateTowards(bullet.transform.rotation,randobullet, 360f);

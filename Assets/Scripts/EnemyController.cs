@@ -32,6 +32,9 @@ public class EnemyController : MonoBehaviour
     private GameObject enemy;
     private Rigidbody enemyRB;
 
+    //get other stuff
+    private PlayerController pc;
+
     [Header("enemy characteristics")]
     [SerializeField]
     private float
@@ -40,7 +43,8 @@ public class EnemyController : MonoBehaviour
 
     private Vector2 movement;
 
-    private float currentHP;
+    private float HPmax;
+    private float HPcurrent;
     //create state machine
 
     private enum State
@@ -60,9 +64,15 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
+        //get components
         enemy = transform.Find("Enemy").gameObject;
         enemyRB = enemy.GetComponent<Rigidbody>();
 
+        pc = GameObject.Find("Player").GetComponent<PlayerController>();
+
+
+
+        HPcurrent = HPmax;
 
 
 
@@ -140,6 +150,18 @@ public class EnemyController : MonoBehaviour
     {
 
     }
+
+    //gets called by SendMessage on the bullets, this is dmg it takes
+    private void DealDmg(float amount)
+    {
+        HPcurrent -= amount;
+        Debug.Log("enemy hp is" + HPcurrent);
+        if (HPcurrent <=  0f)
+        {
+            HPcurrent = 0f;
+        }
+    }
+
 
     //patrol ____________________________________________________________________________________________________________________________________________________________________________________________________
 
@@ -230,8 +252,6 @@ public class EnemyController : MonoBehaviour
     {
 
     }
-
  
-
 
 }

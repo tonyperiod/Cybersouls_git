@@ -7,7 +7,7 @@ public class GunBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        print("hit " + other.name);
+        
         Destroy(gameObject);
     }
 
