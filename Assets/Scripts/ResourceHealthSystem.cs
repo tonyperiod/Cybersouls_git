@@ -1,7 +1,12 @@
 ﻿//indipendent class
+using System;
+
 public class ResourceHealthSystem
 {
-    private int hp;
+    //so hp bar modifies only when hp takes dmg for efficiency sake
+    public event EventHandler onHpChanged;
+
+    private float hp;
     public int hpMax;
 
     public ResourceHealthSystem (int hpMax)
@@ -11,7 +16,7 @@ public class ResourceHealthSystem
 
     }
 
-    public int getHP()
+    public float getHP()
     {
         return hp;
 
@@ -19,28 +24,32 @@ public class ResourceHealthSystem
 
     public float getHpPercent()
     {
-        return hp / hpMax;
-
-
+        return hp / hpMax;        
     }
 
-    public void Damage (int dmgAmount)
+    public void DealDmg(float amount)
     {
-        hp -= dmgAmount;
+        hp -= amount;
         if (hp < 0)
         {
             hp = 0;
         }
 
-    }
-    public void Heal ( int healAmount)
-    {
-        hp += healAmount;
-        if (hp < hpMax)
-        {
-            hp = hpMax;
+        if (onHpChanged != null) onHpChanged(this, EventArgs.Empty);
 
-        }
+
+
     }
+        // if I want to put in later in the game the healing
+    //}
+    //public void Heal ( float healAmount)
+    //{
+    //    hp += healAmount;
+    //    if (hp < hpMax)
+    //    {
+    //        hp = hpMax;
+
+    //    }
+    
 
 }

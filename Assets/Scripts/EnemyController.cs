@@ -38,8 +38,7 @@ public class EnemyController : MonoBehaviour
     [Header("enemy characteristics")]
     [SerializeField]
     private float
-        speedPatrol,
-        maxHP;
+        speedPatrol;
 
     private Vector2 movement;
 
@@ -146,21 +145,17 @@ public class EnemyController : MonoBehaviour
         enemy.transform.Rotate(0f, 180f,0f);
     }
 
-    private void Damage()
-    {
-
-    }
-
+   
     //gets called by SendMessage on the bullets, this is dmg it takes
-    private void DealDmg(float amount)
-    {
-        HPcurrent -= amount;
-        Debug.Log("enemy hp is" + HPcurrent);
-        if (HPcurrent <=  0f)
-        {
-            HPcurrent = 0f;
-        }
-    }
+    //private void DealDmg(float amount)
+    //{
+    //    HPcurrent -= amount;
+    //    Debug.Log("enemy hp is" + HPcurrent);
+    //    if (HPcurrent <=  0f)
+    //    {
+    //        HPcurrent = 0f;
+    //    }
+    //}
 
 
     //patrol ____________________________________________________________________________________________________________________________________________________________________________________________________
