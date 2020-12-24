@@ -39,9 +39,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private float
         speedPatrol;
+   
 
     private Vector2 movement;
-
+    [SerializeField]
     private float HPmax;
     private float HPcurrent;
     //create state machine
@@ -61,8 +62,9 @@ public class EnemyController : MonoBehaviour
 
     //start
 
-    private void Start()
+    void Start()
     {
+       
         //get components
         enemy = transform.Find("Enemy").gameObject;
         enemyRB = enemy.GetComponent<Rigidbody>();
@@ -73,13 +75,16 @@ public class EnemyController : MonoBehaviour
 
         HPcurrent = HPmax;
 
-
+       
 
     }
 
     //update what state is active
-    private void Update()
+    void Update()
     {
+      
+        transform.position += new Vector3(speedPatrol, 0, 0) * Time.deltaTime;
+
         switch (currentState)
         {
             case State.patrol:
@@ -95,6 +100,7 @@ public class EnemyController : MonoBehaviour
                 UpdateDeadState();
                 break;
         }
+        
     }
 
     //state switching
@@ -138,14 +144,16 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    //used funcions ____________________________________________________________________________________________________________________________________________________________________________________________________
+    //non state functions ____________________________________________________________________________________________________________________________________________________________________________________________________
     private void Flip()
     {
         facingDirec *= -1;
-        enemy.transform.Rotate(0f, 180f,0f);
+        enemy.transform.Rotate(0f, 180f, 0f);
     }
 
-   
+
+
+
     //gets called by SendMessage on the bullets, this is dmg it takes
     //private void DealDmg(float amount)
     //{
@@ -178,12 +186,13 @@ public class EnemyController : MonoBehaviour
 
 
         }
-
+        
         else
         {
-            movement.Set(speedPatrol * facingDirec, enemyRB.velocity.y );
-            enemyRB.velocity = movement;
             //move
+            transform.position = new Vector3(transform.position.x * speedPatrol, transform.position.y, transform.position.z);
+
+
         }
     }
 
@@ -232,15 +241,17 @@ public class EnemyController : MonoBehaviour
 
 
     //dead ____________________________________________________________________________________________________________________________________________________________________________________________________
-
+    //here i rotate the thingy to get the boi done
     private void EnterDeadState()
     {
-
+        float torque;
+        torque = 1f;
+        enemyRB.AddTorque(0, 0, torque);
     }
 
     private void UpdateDeadState()
     {
-
+        
     }
 
     private void ExitDeadState()
