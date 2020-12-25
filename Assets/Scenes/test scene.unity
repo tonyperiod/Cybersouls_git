@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 385098076}
   - component: {fileID: 385098075}
   m_Layer: 8
-  m_Name: Cube
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -242,12 +242,12 @@ MonoBehaviour:
   wallCheck: {fileID: 1750540172}
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   whatIsWall:
     serializedVersion: 2
     m_Bits: 2048
-  groundCheckDistance: 5
-  wallCheckDistance: 5
+  groundCheckDistance: 1
+  wallCheckDistance: 1
   speedPatrol: 5
   HPmax: 5
 --- !u!65 &385098076
@@ -320,7 +320,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 385098074}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18.05, y: 1.07, z: 0}
+  m_LocalPosition: {x: -18.05, y: 1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 654442625}
@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 387362628}
   - component: {fileID: 387362627}
   - component: {fileID: 387362626}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (2)
   m_TagString: Walls
   m_Icon: {fileID: 0}
@@ -1565,7 +1565,7 @@ GameObject:
   - component: {fileID: 1962123614}
   - component: {fileID: 1962123613}
   - component: {fileID: 1962123612}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Floor
   m_Icon: {fileID: 0}

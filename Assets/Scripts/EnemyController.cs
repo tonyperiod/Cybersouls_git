@@ -175,11 +175,16 @@ public class EnemyController : MonoBehaviour
 
     private void UpdatePatrolState()
     {
+        //raycast to see if has to flip
+        //find vector to calculate raycast
         groundDetec = Physics.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
         wallDetec = Physics.Raycast(wallCheck.position, transform.right, wallCheckDistance, whatIsWall);
 
         if (!groundDetec || wallDetec)
         {
+            Debug.Log(groundDetec + "ground");
+            Debug.Log(wallDetec + "wall");
+
             //flip 
             Flip();
 
