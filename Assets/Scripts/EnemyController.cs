@@ -19,10 +19,10 @@ public class EnemyController : MonoBehaviour
         whatIsGround,
         whatIsWall;
 
-    [SerializeField]
-    private float
-        groundCheckDistance,
-        wallCheckDistance;
+    //[SerializeField]
+    //private float
+    //    groundCheckDistance,
+    //    wallCheckDistance;
 
 
     //flipping enemy
@@ -168,6 +168,26 @@ public class EnemyController : MonoBehaviour
 
     //patrol ____________________________________________________________________________________________________________________________________________________________________________________________________
 
+    // turn around at walls
+    private void OnTriggerEnter (Collider wall)
+    {
+        if (wall.tag == "Wall")
+        {
+            Flip();
+            Debug.Log("Wall");
+        }
+    }
+    //turn around at the end of a platform
+    private void OnTriggerExit (Collider ground)
+    {
+        if (ground.tag == "Ground")
+        {
+            Flip();
+            Debug.Log("ground");
+        }
+
+
+    }
     private void EnterPatrolState()
     {
 
@@ -175,30 +195,33 @@ public class EnemyController : MonoBehaviour
 
     private void UpdatePatrolState()
     {
-        //raycast to see if has to flip
-        //find vector to calculate raycast
-        groundDetec = Physics.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
-        wallDetec = Physics.Raycast(wallCheck.position, transform.right, wallCheckDistance, whatIsWall);
+        ////raycast to see if has to flip
 
-        if (!groundDetec || wallDetec)
-        {
-            Debug.Log(groundDetec + "ground");
-            Debug.Log(wallDetec + "wall");
+        ////groundDetec = Physics.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
+        ////wallDetec = Physics.Raycast(wallCheck.position, transform.right, wallCheckDistance, whatIsWall);
 
-            //flip 
-            Flip();
+        //if (!groundDetec || wallDetec)
+        //{
+        //    Debug.Log(groundDetec + "ground");
+        //    Debug.Log(wallDetec + "wall");
 
-
-
-        }
-        
-        else
-        {
-            //move
-            transform.position = new Vector3(transform.position.x * speedPatrol, transform.position.y, transform.position.z);
+        //    //flip 
+        //    Flip();
 
 
-        }
+
+        //}
+
+        //else
+        //{
+        //    //move
+        //    transform.position = new Vector3(transform.position.x * speedPatrol, transform.position.y, transform.position.z);
+
+
+        //}
+
+        //move
+        transform.position = new Vector3(transform.position.x * speedPatrol, transform.position.y, transform.position.z);
     }
 
     private void ExitPatrolState()

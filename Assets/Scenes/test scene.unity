@@ -283,15 +283,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundCheck: {fileID: 654442625}
-  wallCheck: {fileID: 0}
+  wallCheck: {fileID: 275689775}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 1024
   whatIsWall:
     serializedVersion: 2
     m_Bits: 2048
-  groundCheckDistance: 1
-  wallCheckDistance: 1
   speedPatrol: 5
   HPmax: 5
 --- !u!65 &385098076
