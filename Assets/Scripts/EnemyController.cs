@@ -219,9 +219,9 @@ public class EnemyController : MonoBehaviour
 
 
         //}
-
-        //move
-        transform.position = new Vector3(transform.position.x * speedPatrol, transform.position.y, transform.position.z);
+         
+        //move done with transorm position to make the flip more seamless. facing direc so that flip works seamlessly, speedpatrol to have parameter that I can modify in editor
+        transform.position = new Vector3(transform.position.x * speedPatrol* facingDirec, transform.position.y, transform.position.z);
     }
 
     private void ExitPatrolState()
