@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyFloor : MonoBehaviour
+public class EnemyGround : MonoBehaviour
 {
     // get ref to EnemyController
     public GameObject enemyObj;
@@ -17,6 +17,11 @@ public class EnemyFloor : MonoBehaviour
     //send message to the EnemyControllerSript
     private void OnTriggerExit(Collider ground)
     {
-        
+        if (ground.tag == "Floor")
+        {
+            enemyObj.SendMessage("Flip");
+            enemyObj.SendMessage("GroundEnd");
+
+        }
     }
 }

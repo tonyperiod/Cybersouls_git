@@ -179,13 +179,15 @@ public class EnemyController : MonoBehaviour
 
     private void UpdatePatrolState()
     {
-      
+
         //    transform.position = new Vector3(transform.position.x * speedPatrol, transform.position.y, transform.position.z);
-       
-        enemyRB.AddForce(speedPatrol*facingDirec, 0, 0, ForceMode.Force);
+
+        //enemyRB.AddForce(speedPatrol*facingDirec, 0, 0, ForceMode.Force);
 
         //}
-         
+        Vector3 moving = new Vector3 (speedPatrol * facingDirec, 0f, 0f);
+        enemyRB.MovePosition(transform.position+moving*Time.fixedDeltaTime);
+
        
 
 

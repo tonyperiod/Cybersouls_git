@@ -20,7 +20,7 @@ public class EnemyWall : MonoBehaviour
         if (wall.tag == "Walls")
         {
             enemyObj.SendMessage("Flip");
-            Debug.Log("wall script hit de wall");
+            enemyObj.SendMessage("WallHit");
 
         }
     }
