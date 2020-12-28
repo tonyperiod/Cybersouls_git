@@ -9,10 +9,7 @@ public class EnemyController : MonoBehaviour
     private bool
         groundDetec,
         wallDetec;
-    [SerializeField]
-    private Transform
-        groundCheck,
-        wallCheck;
+
 
     [SerializeField]
     private LayerMask
@@ -29,7 +26,7 @@ public class EnemyController : MonoBehaviour
     private int facingDirec = 1;
 
     //enemy get stuff
-    private GameObject enemy;
+    public GameObject enemy;
     private Rigidbody enemyRB;
 
     //get other stuff
@@ -38,7 +35,7 @@ public class EnemyController : MonoBehaviour
     [Header("enemy characteristics")]
     [SerializeField]
     private float
-        speedPatrol;
+        speedPatrol = 5;
    
 
     private Vector2 movement;
@@ -64,10 +61,11 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
-       
+
         //get components
-        enemy = transform.Find("Enemy").gameObject;
-        enemyRB = enemy.GetComponent<Rigidbody>();
+
+
+        enemyRB =enemy.GetComponent<Rigidbody>();
 
         pc = GameObject.Find("Player").GetComponent<PlayerController>();
 
@@ -75,15 +73,15 @@ public class EnemyController : MonoBehaviour
 
         HPcurrent = HPmax;
 
-       
 
+        currentState = State.patrol;
     }
 
     //update what state is active
     void Update()
     {
       
-        transform.position += new Vector3(speedPatrol, 0, 0) * Time.deltaTime;
+        
 
         switch (currentState)
         {
@@ -147,8 +145,13 @@ public class EnemyController : MonoBehaviour
     //non state functions ____________________________________________________________________________________________________________________________________________________________________________________________________
     private void Flip()
     {
-        facingDirec *= -1;
-        enemy.transform.Rotate(0f, 180f, 0f);
+        Debug.Log("enemy controller flip");
+        Debug.Log(facingDirec);
+        facingDirec = facingDirec * -1;
+        Debug.Log(facingDirec);
+
+
+       
     }
 
 
@@ -168,60 +171,24 @@ public class EnemyController : MonoBehaviour
 
     //patrol ____________________________________________________________________________________________________________________________________________________________________________________________________
 
-    // turn around at walls
-    private void OnTriggerEnter (Collider wall)
-    {
-        if (wall.tag == "Wall")
-        {
-            Flip();
-            Debug.Log("Wall");
-        }
-    }
-    //turn around at the end of a platform
-    private void OnTriggerExit (Collider ground)
-    {
-        if (ground.tag == "Ground")
-        {
-            Flip();
-            Debug.Log("ground");
-        }
 
-
-    }
     private void EnterPatrolState()
     {
-
+        
     }
 
     private void UpdatePatrolState()
     {
-        ////raycast to see if has to flip
-
-        ////groundDetec = Physics.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
-        ////wallDetec = Physics.Raycast(wallCheck.position, transform.right, wallCheckDistance, whatIsWall);
-
-        //if (!groundDetec || wallDetec)
-        //{
-        //    Debug.Log(groundDetec + "ground");
-        //    Debug.Log(wallDetec + "wall");
-
-        //    //flip 
-        //    Flip();
-
-
-
-        //}
-
-        //else
-        //{
-        //    //move
+      
         //    transform.position = new Vector3(transform.position.x * speedPatrol, transform.position.y, transform.position.z);
-
+       
+        enemyRB.AddForce(speedPatrol*facingDirec, 0, 0, ForceMode.Force);
 
         //}
          
-        //move done with transorm position to make the flip more seamless. facing direc so that flip works seamlessly, speedpatrol to have parameter that I can modify in editor
-        transform.position = new Vector3(transform.position.x * speedPatrol* facingDirec, transform.position.y, transform.position.z);
+       
+
+
     }
 
     private void ExitPatrolState()

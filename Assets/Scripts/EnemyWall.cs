@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class EnemyWall : MonoBehaviour
 {
+    // get ref to EnemyController
+    public GameObject enemyObj;
+    EnemyController enemyCon;
 
-    public GameObject enemyCon;
 
+    void Start()
+    {
+        enemyCon = enemyObj.GetComponent<EnemyController>();
+    }
 
+    //send message to the EnemyControllerSript
     private void OnTriggerEnter(Collider wall)
     {
-        if (wall.tag == "Wall")
+        if (wall.tag == "Walls")
         {
-            
+            enemyObj.SendMessage("Flip");
+            Debug.Log("wall script hit de wall");
 
         }
     }
