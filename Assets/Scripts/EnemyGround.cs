@@ -19,9 +19,16 @@ public class EnemyGround : MonoBehaviour
     {
         if (ground.tag == "Floor")
         {
+            //sends two messages, to be used in patrol or chase
             enemyObj.SendMessage("Flip");
             enemyObj.SendMessage("GroundEnd");
 
         }
+    }
+    
+    private void OnTriggerEnter(Collider ground)
+    {
+        enemyObj.SendMessage("GroundStart");
+
     }
 }

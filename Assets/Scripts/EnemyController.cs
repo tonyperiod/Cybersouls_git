@@ -4,26 +4,9 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    [Header("wall and floor")]
-    //ground and wall checks
-    private bool
-        groundDetec,
-        wallDetec;
-
-
-    [SerializeField]
-    private LayerMask
-        whatIsGround,
-        whatIsWall;
-
-    //[SerializeField]
-    //private float
-    //    groundCheckDistance,
-    //    wallCheckDistance;
-
-
     //flipping enemy
     private int facingDirec = 1;
+    private int playerDirec;
 
     //enemy get stuff
     public GameObject enemy;
@@ -35,15 +18,24 @@ public class EnemyController : MonoBehaviour
     [Header("enemy characteristics")]
     [SerializeField]
     private float
-        speedPatrol = 5;
-   
-
+        speedPatrol = 5,
+        speedChase = 10;
+    public float waitTime;
     private Vector2 movement;
-    [SerializeField]
-    private float HPmax;
-    private float HPcurrent;
-    //create state machine
+    //hp stuff
 
+    //[SerializeField]
+    //private float HPmax;
+    //private float HPcurrent;
+
+    //chase stuff
+    //I NEED TO USE THESE
+    private bool isThereWall = false;
+    private bool isThereGround = true;
+
+    private bool iAmCalm = true;
+
+    //create state machine
     private enum State
     {
         patrol,
@@ -54,7 +46,14 @@ public class EnemyController : MonoBehaviour
     }    
     private State currentState;
 
+    //detection
+    [SerializeField]
+    private float detecRange;
 
+    [SerializeField]
+   public  Transform player;
+
+    private float currentTime = 0;
 
 
     //start
@@ -66,23 +65,52 @@ public class EnemyController : MonoBehaviour
 
 
         enemyRB =enemy.GetComponent<Rigidbody>();
+       
 
         pc = GameObject.Find("Player").GetComponent<PlayerController>();
 
 
 
-        HPcurrent = HPmax;
+        //HPcurrent = HPmax;
 
 
         currentState = State.patrol;
     }
 
-    //update what state is active
-    void Update()
-    {
-      
-        
 
+    
+
+    //general state  ____________________________________________________________________________________________________________________________________________________________________________________________________
+    //update what state is active
+    void Update() 
+    {
+        // for player detection
+        float distToPlayer = Vector2.Distance(transform.position, player.position);
+
+        //player is in attack range, the enemy is attacking
+        if (distToPlayer < detecRange)
+        {
+            iAmCalm = false;
+            PlayerSeen();
+         
+        }
+
+        //enemy is weary of player, but will not continue chasing much longer
+        if (distToPlayer> detecRange && iAmCalm == false)
+
+        {         
+         PlayerEscape();         
+        }
+
+        //calm patrolling of enemy
+        if (distToPlayer>detecRange && iAmCalm == true)
+        {
+
+            currentState = State.patrol;
+        }
+     
+
+        //state machine update
         switch (currentState)
         {
             case State.patrol:
@@ -142,19 +170,39 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    //non state functions ____________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+    //inter-script functions ____________________________________________________________________________________________________________________________________________________________________________________________________
+
+    // patrol functions
     private void Flip()
     {
-        Debug.Log("enemy controller flip");
-        Debug.Log(facingDirec);
         facingDirec = facingDirec * -1;
-        Debug.Log(facingDirec);
 
-
-       
     }
 
 
+    //chase funcions
+    private void WallHit()    
+    {       
+        isThereWall = true;
+    }
+    private void WallOut()
+    {       
+        isThereWall = false;
+    }
+
+
+    private void GroundEnd()
+    {
+        // this is only for chase
+        isThereGround = false;
+    }
+    private void GroundStart()
+    {
+        // this is only for chase
+        isThereGround = true;
+    }
 
 
     //gets called by SendMessage on the bullets, this is dmg it takes
@@ -168,6 +216,40 @@ public class EnemyController : MonoBehaviour
     //    }
     //}
 
+    //player detection ____________________________________________________________________________________________________________________________________________________________________________________________________
+    //float distPlayer = Vector2.Distance(Transform.position, player.position);
+
+    //extra functions ____________________________________________________________________________________________________________________________________________________________________________________________________
+
+    private void PlayerSeen()
+    {
+        Debug.Log("i see enemy");
+        SwitchState(State.chase);
+
+    }
+    private void PlayerEscape()
+    {
+       
+        Debug.Log("enemy gone");
+        //This function allows me to have a certain modifiable amount of time where enemy chases even without eyesight
+        if (Time.time > currentTime)
+        {
+            if (Time.time > waitTime + currentTime)
+            {
+                Debug.Log("calm is mine");
+                SwitchState(State.patrol);
+                currentTime = Time.time;
+                iAmCalm = true;
+                Debug.Log("i managed to calm down");
+            }
+        }
+        else
+        {
+            Debug.Log("i chase escapee");
+            currentState = State.chase;
+           
+        }
+    }
 
     //patrol ____________________________________________________________________________________________________________________________________________________________________________________________________
 
@@ -178,18 +260,9 @@ public class EnemyController : MonoBehaviour
     }
 
     private void UpdatePatrolState()
-    {
-
-        //    transform.position = new Vector3(transform.position.x * speedPatrol, transform.position.y, transform.position.z);
-
-        //enemyRB.AddForce(speedPatrol*facingDirec, 0, 0, ForceMode.Force);
-
-        //}
+    {    
         Vector3 moving = new Vector3 (speedPatrol * facingDirec, 0f, 0f);
-        enemyRB.MovePosition(transform.position+moving*Time.fixedDeltaTime);
-
-       
-
+        enemyRB.MovePosition(transform.position+moving*Time.fixedDeltaTime); 
 
     }
 
@@ -205,11 +278,24 @@ public class EnemyController : MonoBehaviour
 
     private void EnterChaseState()
     {
-
+        //here i put functions I'll need in chase state
+    
     }
 
     private void UpdateChaseState()
     {
+        //find player relative position
+        Vector3 playerEnemyVector = player.position - transform.position;
+        if (playerEnemyVector.x > 0)
+            playerDirec = 1;
+        else
+            playerDirec = -1;
+
+        //move enemy
+
+        Vector3 moving = new Vector3(speedChase * playerDirec, 0f, 0f);
+        enemyRB.MovePosition(transform.position + moving * Time.fixedDeltaTime);
+
 
     }
 
