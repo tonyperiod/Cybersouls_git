@@ -86,7 +86,7 @@ public class EnemyController : MonoBehaviour
         // player detection____________________________________________________________________________________________________________________________________________________________________________________________________
         //mix the raycast with a distance function, so that once enemy sees player in front, then will chase until player far enough
         float distToPlayer = Vector2.Distance(transform.position, player.position);
-        EnemyRays(detecRange);
+        
 
 
         //player is in attack range, the enemy is attacking
@@ -107,10 +107,10 @@ public class EnemyController : MonoBehaviour
         //calm patrolling of enemy
         if (distToPlayer>detecRange && iAmCalm == true)
         {
-            facingDirec *= -1; //enemy turns away from player so that doesn't seem like it's still chasing
+            
             currentState = State.patrol;
         }
-
+        
 
         //state machine update____________________________________________________________________________________________________________________________________________________________________________________________________
         switch (currentState)
@@ -178,7 +178,7 @@ public class EnemyController : MonoBehaviour
 
     // patrol functions
     private void Flip()
-    {
+    {       
         facingDirec *= -1;
 
     }
@@ -225,20 +225,31 @@ public class EnemyController : MonoBehaviour
 
     bool EnemyRays(float distance)
     {
-        bool val = false;
-        float castDist = distance;        
-        Vector3 EndPos = transform.position + new Vector3(1,1,1)* distance * facingDirec; // placed the 111 vector for simplicity, as you cannot add a vector and a float
         
-        LayerMask mask = LayerMask.GetMask("damagable");
+        bool val = false;
+        float castDist = distance;
+        RaycastHit hit;
 
 
 
-        if (Physics.Raycast(transform.position, new Vector3(1, 0, 0), distance, mask))
-            val = true;
-        else
-            val = false;
+        if (Physics.Raycast(transform.position, new Vector3(facingDirec, 0, 0), out hit, distance))
+        {
+            if (hit.collider.tag == "Player")
+            {
+                val = true;
+                Debug.Log("I see");
+            }
+            else
+                /*Debug.Log("half working")*/;
+        }
+
+
+        Debug.DrawRay(transform.position, new Vector3(facingDirec, 0, 0));
+
 
         return val;
+
+
     }
     
     
@@ -324,7 +335,7 @@ public class EnemyController : MonoBehaviour
 
     private void ExitChaseState()
     {
-
+        facingDirec *= -1; //no longer chasing, so goes opposite direction
     }
     //attack ____________________________________________________________________________________________________________________________________________________________________________________________________
 
