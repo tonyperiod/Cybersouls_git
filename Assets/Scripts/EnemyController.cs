@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     //flipping enemy
-    private int facingDirec = 1;
-    private int playerDirec;
+    private int facingDirec = 1; //this parameter is used for all enemy movement direction, so that state switching happens seamlessly
+   
 
     //enemy get stuff
     public GameObject enemy;
@@ -28,10 +28,9 @@ public class EnemyController : MonoBehaviour
     //private float HPmax;
     //private float HPcurrent;
 
-    //chase stuff
-    //I NEED TO USE THESE
-    private bool isThereWall = false;
-    private bool isThereGround = true;
+    //chase stuff  
+    private bool isThereWall = false;  //I NEED TO USE THESE
+    private bool isThereGround = true;  //I NEED TO USE THESE
 
     private bool iAmCalm = true;
 
@@ -80,22 +79,25 @@ public class EnemyController : MonoBehaviour
 
     
 
-    //general state  ____________________________________________________________________________________________________________________________________________________________________________________________________
+ 
     //update what state is active
     void Update() 
     {
-        // for player detection
+        // player detection____________________________________________________________________________________________________________________________________________________________________________________________________
+        //mix the raycast with a distance function, so that once enemy sees player in front, then will chase until player far enough
         float distToPlayer = Vector2.Distance(transform.position, player.position);
+        EnemyRays(detecRange);
+
 
         //player is in attack range, the enemy is attacking
-        if (distToPlayer < detecRange)
+        if (EnemyRays(detecRange))
         {
             iAmCalm = false;
             PlayerSeen();
          
         }
 
-        //enemy is weary of player, but will not continue chasing much longer
+        //enemy is weary of player, but will not continue chasing much longer. no longer using the raycast to chase player. enemy only notices is run in front
         if (distToPlayer> detecRange && iAmCalm == false)
 
         {         
@@ -105,12 +107,12 @@ public class EnemyController : MonoBehaviour
         //calm patrolling of enemy
         if (distToPlayer>detecRange && iAmCalm == true)
         {
-
+            facingDirec *= -1; //enemy turns away from player so that doesn't seem like it's still chasing
             currentState = State.patrol;
         }
-     
 
-        //state machine update
+
+        //state machine update____________________________________________________________________________________________________________________________________________________________________________________________________
         switch (currentState)
         {
             case State.patrol:
@@ -177,7 +179,7 @@ public class EnemyController : MonoBehaviour
     // patrol functions
     private void Flip()
     {
-        facingDirec = facingDirec * -1;
+        facingDirec *= -1;
 
     }
 
@@ -221,6 +223,26 @@ public class EnemyController : MonoBehaviour
 
     //extra functions ____________________________________________________________________________________________________________________________________________________________________________________________________
 
+    bool EnemyRays(float distance)
+    {
+        bool val = false;
+        float castDist = distance;        
+        Vector3 EndPos = transform.position + new Vector3(1,1,1)* distance * facingDirec; // placed the 111 vector for simplicity, as you cannot add a vector and a float
+        
+        LayerMask mask = LayerMask.GetMask("damagable");
+
+
+
+        if (Physics.Raycast(transform.position, new Vector3(1, 0, 0), distance, mask))
+            val = true;
+        else
+            val = false;
+
+        return val;
+    }
+    
+    
+    
     private void PlayerSeen()
     {
         Debug.Log("i see enemy");
@@ -286,14 +308,15 @@ public class EnemyController : MonoBehaviour
     {
         //find player relative position
         Vector3 playerEnemyVector = player.position - transform.position;
+        //using relativec position between player and enemy, can get facing direction.
         if (playerEnemyVector.x > 0)
-            playerDirec = 1;
+            facingDirec = 1;
         else
-            playerDirec = -1;
+            facingDirec = -1;
 
         //move enemy
 
-        Vector3 moving = new Vector3(speedChase * playerDirec, 0f, 0f);
+        Vector3 moving = new Vector3(speedChase * facingDirec, 0f, 0f);
         enemyRB.MovePosition(transform.position + moving * Time.fixedDeltaTime);
 
 
