@@ -241,9 +241,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 385098074}
   speedPatrol: 10
-  speedChase: 40
+  speedChase: 15
   waitTime: 2
-  detecRange: 405
+  detecRange: 100
   player: {fileID: 793075706}
 --- !u!65 &385098076
 BoxCollider:
@@ -315,7 +315,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 385098074}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.26, y: 3.32, z: 0}
+  m_LocalPosition: {x: 3.26, y: 1.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1252907272}
@@ -338,8 +338,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 72
-  m_CollisionDetection: 0
+  m_Constraints: 120
+  m_CollisionDetection: 1
 --- !u!1 &387362625
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,7 +1156,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.58299994, z: -8.1}
+  m_LocalPosition: {x: 0, y: 0.58299994, z: -16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 793075706}

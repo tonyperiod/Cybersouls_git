@@ -83,6 +83,8 @@ public class EnemyController : MonoBehaviour
     //update what state is active
     void Update() 
     {
+       
+
         // player detection____________________________________________________________________________________________________________________________________________________________________________________________________
         //mix the raycast with a distance function, so that once enemy sees player in front, then will chase until player far enough
         float distToPlayer = Vector2.Distance(transform.position, player.position);
@@ -199,11 +201,13 @@ public class EnemyController : MonoBehaviour
     {
         // this is only for chase
         isThereGround = false;
+        Debug.Log(isThereGround);
     }
-    private void GroundStart()
+    private void GroundIn()
     {
         // this is only for chase
         isThereGround = true;
+        Debug.Log(isThereGround);
     }
 
 
@@ -239,8 +243,8 @@ public class EnemyController : MonoBehaviour
                 val = true;
                 Debug.Log("I see");
             }
-            else
-                /*Debug.Log("half working")*/;
+            
+                /*Debug.Log("half working")*/
         }
 
 
@@ -293,9 +297,23 @@ public class EnemyController : MonoBehaviour
     }
 
     private void UpdatePatrolState()
-    {    
-        Vector3 moving = new Vector3 (speedPatrol * facingDirec, 0f, 0f);
-        enemyRB.MovePosition(transform.position+moving*Time.fixedDeltaTime); 
+    {
+        if (isThereGround == true)
+        {
+            Vector3 moving = new Vector3(speedPatrol * facingDirec, 0f, 0f);
+            enemyRB.velocity = moving;
+        }
+        else
+        {
+            Vector3 HitGround = new Vector3(speedPatrol * facingDirec, -11f, 0f);
+            enemyRB.velocity = HitGround;
+        }
+
+            
+
+
+     
+
 
     }
 
@@ -325,11 +343,27 @@ public class EnemyController : MonoBehaviour
         else
             facingDirec = -1;
 
-        //move enemy
+                   
 
-        Vector3 moving = new Vector3(speedChase * facingDirec, 0f, 0f);
-        enemyRB.MovePosition(transform.position + moving * Time.fixedDeltaTime);
+        //wall chasing and walking, gravity was acting buggy so added in fake gravity as in player controller
+        if (isThereWall == true )
+        {   Vector3 wallRunSpeed = new Vector3(0f, speedChase * facingDirec, 0f);
+            enemyRB.velocity= wallRunSpeed;
+        }       
+        
+        if (isThereWall == false && isThereGround == false)
+        {
+            Vector3 fallingSpeed = new Vector3(0f, -11f, 0f);
+            enemyRB.velocity = fallingSpeed;
+    
 
+
+        }
+        if (isThereWall == false && isThereGround == true)
+        {
+            Vector3 moving = new Vector3(speedChase * facingDirec, 0f, 0f);
+            enemyRB.velocity = moving;
+        }
 
     }
 

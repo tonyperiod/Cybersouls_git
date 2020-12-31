@@ -84,6 +84,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // pllayer controller can't freeze transformations, so I place freeze here
+        transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
+
         //getting parameters from other scripts
         cowardiceAngle = rmscript.cowardiceAngle;
         // controller
