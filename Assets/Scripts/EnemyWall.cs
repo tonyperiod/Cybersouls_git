@@ -36,6 +36,11 @@ public class EnemyWall : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider wall)
+    {
+        if (wall.tag == "Walls")
+            enemyObj.SendMessage("WallHit");
+    }
     
 }
 

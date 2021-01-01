@@ -28,14 +28,15 @@ public class EnemyGround : MonoBehaviour
     
     private void OnTriggerEnter(Collider ground)
     {
-        enemyObj.SendMessage("GroundIn");
+        if (ground.tag == "Floor")
+            enemyObj.SendMessage("GroundIn");
 
     }
 
     private void OnTriggerStay (Collider Floor)
     {
-        enemyObj.SendMessage("GroundIn");
-
+        if (Floor.tag == "Floor")
+            enemyObj.SendMessage("GroundIn");
 
     }
 }

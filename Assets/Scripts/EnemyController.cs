@@ -47,7 +47,7 @@ public class EnemyController : MonoBehaviour
 
     //detection
     [SerializeField]
-    private float detecRange;
+    private float detecRange = 100f;
 
     [SerializeField]
    public  Transform player;
@@ -100,7 +100,7 @@ public class EnemyController : MonoBehaviour
         }
 
         //enemy is weary of player, but will not continue chasing much longer. no longer using the raycast to chase player. enemy only notices is run in front
-        if (distToPlayer> detecRange && iAmCalm == false)
+        if (iAmCalm == false)
 
         {         
          PlayerEscape();         
@@ -112,7 +112,8 @@ public class EnemyController : MonoBehaviour
             
             currentState = State.patrol;
         }
-        
+        // view debug
+        Debug.DrawRay(transform.position, new Vector3(facingDirec, 0, 0));
 
         //state machine update____________________________________________________________________________________________________________________________________________________________________________________________________
         switch (currentState)
@@ -248,7 +249,7 @@ public class EnemyController : MonoBehaviour
         }
 
 
-        Debug.DrawRay(transform.position, new Vector3(facingDirec, 0, 0));
+        
 
 
         return val;
@@ -361,6 +362,7 @@ public class EnemyController : MonoBehaviour
         }
         if (isThereWall == false && isThereGround == true)
         {
+            Debug.Log(isThereGround);
             Vector3 moving = new Vector3(speedChase * facingDirec, 0f, 0f);
             enemyRB.velocity = moving;
         }
