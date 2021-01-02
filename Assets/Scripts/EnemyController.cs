@@ -364,6 +364,14 @@ public class EnemyController : MonoBehaviour
             enemyRB.velocity = moving;
         }
 
+        if (isThereWall == true)
+        {
+            Vector3 wallRunSpeed = new Vector3(0, speedChase, 0);
+            enemyRB.velocity = wallRunSpeed;
+
+
+        }
+
     }
 
     private void ExitChaseState()

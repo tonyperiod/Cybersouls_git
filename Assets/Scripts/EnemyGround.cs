@@ -24,19 +24,27 @@ public class EnemyGround : MonoBehaviour
             enemyObj.SendMessage("GroundEnd");
 
         }
+
+        if (ground.tag == "Walls")
+            enemyObj.SendMessage("GroundEnd");
     }
     
     private void OnTriggerEnter(Collider ground)
     {
         if (ground.tag == "Floor")
             enemyObj.SendMessage("GroundIn");
+       //for wall run
+        if (ground.tag == "Walls")
+            enemyObj.SendMessage("GroundIn");
 
     }
 
-    private void OnTriggerStay (Collider Floor)
+    private void OnTriggerStay (Collider ground)
     {
-        if (Floor.tag == "Floor")
+        if (ground.tag == "Floor")
             enemyObj.SendMessage("GroundIn");
-
+        //for wall run
+        if (ground.tag == "Walls")
+            enemyObj.SendMessage("GroundIn");
     }
 }
