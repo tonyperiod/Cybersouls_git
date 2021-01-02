@@ -34,6 +34,7 @@ public class EnemyController : MonoBehaviour
 
     private bool iAmCalm = true;
 
+    private bool PlayerSeenBool = false;
     //create state machine
     private enum State
     {
@@ -88,11 +89,12 @@ public class EnemyController : MonoBehaviour
         // player detection____________________________________________________________________________________________________________________________________________________________________________________________________
         //mix the raycast with a distance function, so that once enemy sees player in front, then will chase until player far enough
         float distToPlayer = Vector2.Distance(transform.position, player.position);
-        
+        EnemyRays(detecRange);
+
 
 
         //player is in attack range, the enemy is attacking
-        if (EnemyRays(detecRange))
+        if (PlayerSeenBool == true)
         {
             iAmCalm = false;
             PlayerSeen();
@@ -202,13 +204,13 @@ public class EnemyController : MonoBehaviour
     {
         // this is only for chase
         isThereGround = false;
-        Debug.Log(isThereGround);
+        
     }
     private void GroundIn()
     {
         // this is only for chase
         isThereGround = true;
-        Debug.Log(isThereGround);
+        
     }
 
 
@@ -228,21 +230,20 @@ public class EnemyController : MonoBehaviour
 
     //extra functions ____________________________________________________________________________________________________________________________________________________________________________________________________
 
-    bool EnemyRays(float distance)
+    void EnemyRays(float distance)
     {
         
-        bool val = false;
+       
         float castDist = distance;
         RaycastHit hit;
-
-
-
+       
         if (Physics.Raycast(transform.position, new Vector3(facingDirec, 0, 0), out hit, distance))
         {
+            
             if (hit.collider.tag == "Player")
             {
-                val = true;
-                Debug.Log("I see");
+                PlayerSeenBool = true;
+                
             }
             
                 /*Debug.Log("half working")*/
@@ -252,7 +253,7 @@ public class EnemyController : MonoBehaviour
         
 
 
-        return val;
+        
 
 
     }
