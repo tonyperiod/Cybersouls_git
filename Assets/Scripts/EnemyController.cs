@@ -182,11 +182,7 @@ public class EnemyController : MonoBehaviour
     //inter-script functions ____________________________________________________________________________________________________________________________________________________________________________________________________
 
     // patrol functions
-    private void Flip()
-    {       
-        facingDirec *= -1;
-
-    }
+   
 
 
     //chase funcions
@@ -300,6 +296,9 @@ public class EnemyController : MonoBehaviour
 
     private void UpdatePatrolState()
     {
+        if (isThereWall == true)
+            facingDirec *= -1;
+
         if (isThereGround == true)
         {
             Vector3 moving = new Vector3(speedPatrol * facingDirec, 0f, 0f);
@@ -348,10 +347,7 @@ public class EnemyController : MonoBehaviour
                    
 
         //wall chasing and walking, gravity was acting buggy so added in fake gravity as in player controller
-        if (isThereWall == true )
-        {   Vector3 wallRunSpeed = new Vector3(0f, speedChase * facingDirec, 0f);
-            enemyRB.velocity= wallRunSpeed;
-        }       
+ 
         
         if (isThereWall == false && isThereGround == false)
         {

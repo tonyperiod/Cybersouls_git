@@ -20,7 +20,7 @@ public class EnemyWall : MonoBehaviour
         if (wall.tag == "Walls")
         {
             //sends two messages, to be used in patrol or chase
-            enemyObj.SendMessage("Flip");
+           
             enemyObj.SendMessage("WallHit");
 
         }
