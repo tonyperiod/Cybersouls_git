@@ -57,13 +57,20 @@ public class EnemyController : MonoBehaviour
         attckRange = 2f,
         attckJumpBack = 30,
         attckForce = 70,
-        attckWait = 1;
-    
+        attckWait = 1,
+        attckStun = 1;
+   
+
+    private bool
+        attckHappens = false,
+        isThereEnemy = false,
+        jumpedBack = false;
+
 
     [SerializeField]
    public  Transform player;
 
-    private float currentTime = 0;
+    private float currentTime;
 
 
     //start
@@ -83,7 +90,7 @@ public class EnemyController : MonoBehaviour
 
         //HPcurrent = HPmax;
 
-
+        currentTime = Time.time;
         currentState = State.patrol;
     }
 
@@ -101,20 +108,20 @@ public class EnemyController : MonoBehaviour
         EnemyRays(detecRange);
         
         //player is in view range, the enemy is chasing
-        if (PlayerSeenBool == true)
+        if (PlayerSeenBool == true && attckHappens == false)
         {
             iAmCalm = false;
             PlayerSeen();         
         }
 
         //enemy is weary of player, but will not continue chasing much longer. no longer using the raycast to chase player. enemy only notices is run in front
-        if (iAmCalm == false)
+        if (iAmCalm == false && attckHappens == false)
         {         
          PlayerEscape();         
         }
 
         //calm patrolling of enemy
-        if (distToPlayer>detecRange && iAmCalm == true)
+        if (distToPlayer>detecRange && iAmCalm == true && attckHappens==false)
         {            
             currentState = State.patrol;
         }
@@ -125,14 +132,21 @@ public class EnemyController : MonoBehaviour
 
 
         //player attack
+        // attckHappens to prevent state switching with the backing up of enemy
 
-        if (PlayerSeenBool == true && distToPlayer < attckRange)
+        if (PlayerSeenBool == true && distToPlayer < attckRange && attckHappens==false)
+        {            
+            
+            
+            SwitchState(State.attack);
+            attckHappens = true;
+        }
+
+        if (attckHappens == true)
         {
             currentState = State.attack;
-            Debug.Log(currentState);
+            
         }
-        
-
         //state machine update____________________________________________________________________________________________________________________________________________________________________________________________________
         switch (currentState)
         {
@@ -223,6 +237,16 @@ public class EnemyController : MonoBehaviour
         // this is only for chase
         isThereGround = true;
         
+    }
+
+    private void EnemyHit()
+    {
+        isThereEnemy = true;
+    }
+
+    private void EnemyOut()
+    {
+        isThereEnemy = false;
     }
 
 
@@ -342,8 +366,7 @@ public class EnemyController : MonoBehaviour
 
     private void EnterChaseState()
     {
-        //here i put functions I'll need in chase state
-    
+
     }
 
     private void UpdateChaseState()
@@ -391,34 +414,53 @@ public class EnemyController : MonoBehaviour
 
     private void EnterAttackState()
     {
-        
+        //enemy hop back before attack to telegraph
+        Debug.Log("enetered attack state");
+        if (jumpedBack == false)
+        {
 
+            enemyRB.AddForce(0, attckJumpBack, 0, ForceMode.Impulse);
+
+            jumpedBack = true;
+            Debug.Log(jumpedBack);
+        }
     }
 
     private void UpdateAttackState()
     {
-        //repeated code, so to not confuse the patrol, while keeping a single parameter for facing direction of enemy
-
+     //reusing code 
         Vector3 playerEnemyVector = player.position - transform.position;
-        if (playerEnemyVector.x > 0)
-            facingDirec = 1;
-        else
-            facingDirec = -1;
-        //using only enter function so that it only happens once
 
-        //enemy hop back before attack to telegraph
-        enemyRB.AddForce(attckJumpBack * -facingDirec, 0, 0, ForceMode.Impulse);
+        enemyRB.AddForce(attckForce * playerEnemyVector);
 
         //reuse waiting code
         if (Time.time > currentTime)
         {
             if (Time.time > attckWait + currentTime)
             {
-                //Debug.Log("calm is mine");
-
+                Debug.Log("time out");
                 currentTime = Time.time;
-                enemyRB.AddForce(attckForce * playerEnemyVector);
-                currentState = State.chase;
+                
+                if (isThereEnemy == true)
+                {
+                    //mini stun after attack to not have endless attack cycle
+                    Debug.Log("started stun");
+                    enemyRB.velocity = new Vector3(0, 0, 0);
+
+                    if (Time.time > currentTime)
+                    {
+                        if (Time.time >= attckStun + currentTime)
+                        {
+                            currentTime = Time.time;
+                            attckHappens = false;
+                            jumpedBack = false;
+                            Debug.Log("finished attckstun");
+                            SwitchState(State.chase);
+                        }
+                    }
+                }
+                
+
             }
         }
 

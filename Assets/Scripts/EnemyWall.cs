@@ -8,7 +8,8 @@ public class EnemyWall : MonoBehaviour
     public GameObject enemyObj;
     EnemyController enemyCon;
 
-
+    //this collider is perfect also to track collisions with the player
+    //will use the same script and collider for both
     void Start()
     {
         enemyCon = enemyObj.GetComponent<EnemyController>();
@@ -17,11 +18,16 @@ public class EnemyWall : MonoBehaviour
     //send message to the EnemyControllerSript
     private void OnTriggerEnter(Collider wall)
     {
+        //for patrol and chase   
         if (wall.tag == "Walls")
-        {
-            //sends two messages, to be used in patrol or chase
-           
+        {                    
             enemyObj.SendMessage("WallHit");
+        }
+
+        // for attack
+        if (wall.tag == "Player")
+        {
+            enemyObj.SendMessage("EnemyHit");
 
         }
     }
@@ -29,10 +35,14 @@ public class EnemyWall : MonoBehaviour
     private void OnTriggerExit(Collider wall)
     {
         if (wall.tag == "Walls")
-        {          
-            
+        {  
             enemyObj.SendMessage("WallOut");
+        }
 
+        //for attack
+        if (wall.tag == "Player")
+        {
+            enemyObj.SendMessage("EnemyOut");
         }
     }
 
@@ -41,6 +51,7 @@ public class EnemyWall : MonoBehaviour
         if (wall.tag == "Walls")
             enemyObj.SendMessage("WallHit");
     }
+
     
 }
 
