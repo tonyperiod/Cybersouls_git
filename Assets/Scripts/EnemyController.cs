@@ -50,6 +50,16 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private float detecRange = 100f;
 
+    //attack
+
+    [SerializeField]
+    private float
+        attckRange = 2f,
+        attckJumpBack = 30,
+        attckForce = 70,
+        attckWait = 1;
+    
+
     [SerializeField]
    public  Transform player;
 
@@ -78,47 +88,49 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    
 
- 
-    //update what state is active
+
+
+    //update what state is active____________________________________________________________________________________________________________________________________________________________________________________________________
     void Update() 
     {
-       
+        // player detection
 
-        // player detection____________________________________________________________________________________________________________________________________________________________________________________________________
         //mix the raycast with a distance function, so that once enemy sees player in front, then will chase until player far enough
         float distToPlayer = Vector2.Distance(transform.position, player.position);
         EnemyRays(detecRange);
-
-      
-
-        //player is in attack range, the enemy is attacking
+        
+        //player is in view range, the enemy is chasing
         if (PlayerSeenBool == true)
         {
             iAmCalm = false;
-            PlayerSeen();
-         
+            PlayerSeen();         
         }
 
         //enemy is weary of player, but will not continue chasing much longer. no longer using the raycast to chase player. enemy only notices is run in front
         if (iAmCalm == false)
-
         {         
          PlayerEscape();         
         }
 
         //calm patrolling of enemy
         if (distToPlayer>detecRange && iAmCalm == true)
-        {
-            
+        {            
             currentState = State.patrol;
         }
+                
+        // in case for facing direc debug
+        //  Debug.DrawRay(transform.position, new Vector3(facingDirec, 0, 0));
 
-        // view debug
 
-        Debug.DrawRay(transform.position, new Vector3(facingDirec, 0, 0));
-        //Debug.Log(PlayerSeenBool);
+
+        //player attack
+
+        if (PlayerSeenBool == true && distToPlayer < attckRange)
+        {
+            currentState = State.attack;
+            Debug.Log(currentState);
+        }
         
 
         //state machine update____________________________________________________________________________________________________________________________________________________________________________________________________
@@ -243,25 +255,17 @@ public class EnemyController : MonoBehaviour
             if (hit.collider.tag == "Player")
             {
                 PlayerSeenBool = true;
-                Debug.Log("ray seen player");
+              
             }
 
             else
                 PlayerSeenBool = false;
                
         }
-
-
-        
-
-
-        
-
-
     }
-    
-    
-    
+
+
+    //state switchers____________________________________________________________________________________________________________________________________________________________________________________________________
     private void PlayerSeen()
     {
         //Debug.Log("i see enemy");
@@ -291,6 +295,8 @@ public class EnemyController : MonoBehaviour
            
         }
     }
+
+
 
     //patrol ____________________________________________________________________________________________________________________________________________________________________________________________________
 
@@ -350,19 +356,17 @@ public class EnemyController : MonoBehaviour
         else
             facingDirec = -1;
 
-                   
+
 
         //wall chasing and walking, gravity was acting buggy so added in fake gravity as in player controller
- 
-        
+
+
         if (isThereWall == false && isThereGround == false)
         {
             Vector3 fallingSpeed = new Vector3(0f, -11f, 0f);
-            enemyRB.velocity = fallingSpeed;
-    
-
-
+            enemyRB.AddForce(fallingSpeed);
         }
+
         if (isThereWall == false && isThereGround == true)
         {           
             Vector3 moving = new Vector3(speedChase * facingDirec, 0f, 0f);
@@ -387,11 +391,37 @@ public class EnemyController : MonoBehaviour
 
     private void EnterAttackState()
     {
+        
 
     }
 
     private void UpdateAttackState()
     {
+        //repeated code, so to not confuse the patrol, while keeping a single parameter for facing direction of enemy
+
+        Vector3 playerEnemyVector = player.position - transform.position;
+        if (playerEnemyVector.x > 0)
+            facingDirec = 1;
+        else
+            facingDirec = -1;
+        //using only enter function so that it only happens once
+
+        //enemy hop back before attack to telegraph
+        enemyRB.AddForce(attckJumpBack * -facingDirec, 0, 0, ForceMode.Impulse);
+
+        //reuse waiting code
+        if (Time.time > currentTime)
+        {
+            if (Time.time > attckWait + currentTime)
+            {
+                //Debug.Log("calm is mine");
+
+                currentTime = Time.time;
+                enemyRB.AddForce(attckForce * playerEnemyVector);
+                currentState = State.chase;
+            }
+        }
+
 
     }
 
