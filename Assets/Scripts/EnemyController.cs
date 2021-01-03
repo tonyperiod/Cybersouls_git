@@ -29,8 +29,8 @@ public class EnemyController : MonoBehaviour
     //private float HPcurrent;
 
     //chase stuff  
-    private bool isThereWall = false;  //I NEED TO USE THESE
-    private bool isThereGround = true;  //I NEED TO USE THESE
+    private bool isThereWall = false;
+    private bool isThereGround = true; 
 
     private bool iAmCalm = true;
 
@@ -39,7 +39,7 @@ public class EnemyController : MonoBehaviour
     private enum State
     {
         patrol,
-        chase, //maybe put some climbing in if they are chasing you
+        chase, 
         attack,
         dead
 
@@ -91,7 +91,7 @@ public class EnemyController : MonoBehaviour
         float distToPlayer = Vector2.Distance(transform.position, player.position);
         EnemyRays(detecRange);
 
-
+      
 
         //player is in attack range, the enemy is attacking
         if (PlayerSeenBool == true)
@@ -114,8 +114,12 @@ public class EnemyController : MonoBehaviour
             
             currentState = State.patrol;
         }
+
         // view debug
+
         Debug.DrawRay(transform.position, new Vector3(facingDirec, 0, 0));
+        //Debug.Log(PlayerSeenBool);
+        
 
         //state machine update____________________________________________________________________________________________________________________________________________________________________________________________________
         switch (currentState)
@@ -235,14 +239,16 @@ public class EnemyController : MonoBehaviour
        
         if (Physics.Raycast(transform.position, new Vector3(facingDirec, 0, 0), out hit, distance))
         {
-            
+
             if (hit.collider.tag == "Player")
             {
                 PlayerSeenBool = true;
-                
+                Debug.Log("ray seen player");
             }
-            
-                /*Debug.Log("half working")*/
+
+            else
+                PlayerSeenBool = false;
+               
         }
 
 
@@ -258,29 +264,29 @@ public class EnemyController : MonoBehaviour
     
     private void PlayerSeen()
     {
-        Debug.Log("i see enemy");
+        //Debug.Log("i see enemy");
         SwitchState(State.chase);
 
     }
     private void PlayerEscape()
     {
        
-        Debug.Log("enemy gone");
+        //Debug.Log("enemy gone");
         //This function allows me to have a certain modifiable amount of time where enemy chases even without eyesight
         if (Time.time > currentTime)
         {
             if (Time.time > waitTime + currentTime)
             {
-                Debug.Log("calm is mine");
+                //Debug.Log("calm is mine");
                 SwitchState(State.patrol);
                 currentTime = Time.time;
                 iAmCalm = true;
-                Debug.Log("i managed to calm down");
+                //Debug.Log("i managed to calm down");
             }
         }
         else
         {
-            Debug.Log("i chase escapee");
+            //Debug.Log("i chase escapee");
             currentState = State.chase;
            
         }
@@ -358,8 +364,7 @@ public class EnemyController : MonoBehaviour
 
         }
         if (isThereWall == false && isThereGround == true)
-        {
-            Debug.Log(isThereGround);
+        {           
             Vector3 moving = new Vector3(speedChase * facingDirec, 0f, 0f);
             enemyRB.velocity = moving;
         }
